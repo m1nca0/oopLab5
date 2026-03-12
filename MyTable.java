@@ -84,9 +84,9 @@ public class MyTable extends AbstractTableModel {
         }
     }
 
-    // public void addStudent(Student student) {
-    //     this.university.getListStudent().add(student);
-    //     this.fireTableDataChanged();
-    // }
+    public void addSamples(Sample sample) {
+        this.daw.CreateSample(sample);
+        this.fireTableDataChanged();
+    }
 }
 

@@ -4,10 +4,6 @@ import java.util.List;
 public class Daw {
     private List<Sample> samples = new ArrayList<>();
     private int currentSample = 0;
-    
-    public List<Sample> getSize(){
-        return samples;
-    }
 
     public void CreateSample(Sample sample)
     {

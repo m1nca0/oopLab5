@@ -82,6 +82,16 @@ public class DawView extends JFrame {
             JOptionPane.PLAIN_MESSAGE
         );
         if (result == JOptionPane.OK_OPTION) {
+            if (nameKick.getText().trim().isEmpty() ||
+                lenKick.getText().trim().isEmpty() ||
+                volumeKick.getText().trim().isEmpty() ||
+                lowFrequencyKick.getText().trim().isEmpty() ||
+                highFrequencyKick.getText().trim().isEmpty() ||
+                bassLevelKick.getText().trim().isEmpty()) {
+                
+                JOptionPane.showMessageDialog(this, "Для добавления сэмпла заполните все поля!");
+
+            }
             String name = nameKick.getText().trim();
             int len = Integer.parseInt(lenKick.getText().trim());
             double volume = Double.parseDouble(volumeKick.getText().trim());
@@ -90,6 +100,7 @@ public class DawView extends JFrame {
             int bassLevel = Integer.parseInt(bassLevelKick.getText().trim());
 
             Kick kick = new Kick(name, len, volume, lowFrequency, highFrequency, bassLevel);
+            myTableModel.addSamples(kick);
             JOptionPane.showMessageDialog(this, "Kick - " + name + " успешно добавлен!");
         }
     }
