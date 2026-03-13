@@ -2,9 +2,11 @@ import javax.swing.table.AbstractTableModel;
 
 public class MyTable extends AbstractTableModel {
     private Daw daw;
+    private DawInOut inOut;
 
-    public MyTable(Daw daw) {
+    public MyTable(Daw daw, DawInOut inOut) {
         this.daw = daw;
+        this.inOut = inOut;
     }
 
     @Override
@@ -86,6 +88,10 @@ public class MyTable extends AbstractTableModel {
     }
     public void deleteSamples(String name, String type) {
         this.daw.findSample(name,type,false);
+        this.fireTableDataChanged();
+    }
+    public void openSamples(String way){
+        this.daw = inOut.loadProject(way);
         this.fireTableDataChanged();
     }
 }

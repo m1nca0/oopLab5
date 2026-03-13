@@ -5,27 +5,32 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class DawView extends JFrame {
     private Daw daw;
+    private DawInOut inOut;
     private MyTable myTableModel;
     private JComboBox<JButton> addSample;
     private int rowIndex = 0;
+    private JFileChooser fileChooser = new JFileChooser();
     public DawView() {
         this.daw = new Daw();
-
-        myTableModel = new MyTable(this.daw);
+        this.inOut = new DawInOut();
+        myTableModel = new MyTable(this.daw, this.inOut);
         JTable table = new JTable(myTableModel);
         table.setAutoCreateRowSorter(true);
         TableRowSorter<MyTable> sorter = new TableRowSorter<>(myTableModel);
         table.setRowSorter(sorter);
 
         JScrollPane scrollPane = new JScrollPane(table);
+        JButton openButton = new JButton("Открыть");
+        JButton saveButton = new JButton("Сохранить");
         JButton addButton = new JButton("Добавить");
         JButton deleteButton = new JButton("Удалить");
         JLabel searchLabel = new JLabel(" Поиск: ");
         JTextField searchField = new JTextField(15);
-        JButton filterButton = new JButton("Фильтр");
+        JButton filterButton = new JButton("Параметр поиска");
 
         searchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
             @Override
@@ -51,6 +56,10 @@ public class DawView extends JFrame {
 
         JToolBar toolBar = new JToolBar();
         toolBar.setFloatable(false);
+        toolBar.add(openButton);
+        toolBar.addSeparator();
+        toolBar.add(saveButton);
+        toolBar.addSeparator();
         toolBar.add(addButton);
         toolBar.addSeparator();
         toolBar.add(deleteButton);
@@ -66,8 +75,17 @@ public class DawView extends JFrame {
         addButton.addActionListener(e -> showAddMenu(addButton));
         deleteButton.addActionListener(e -> showDeleteMenu());
         filterButton.addActionListener(e -> showFilterMenu(filterButton));
+        openButton.addActionListener(e -> showFileList());
 
         setVisible(true);
+    }
+    private void showFileList(){
+
+        int response = fileChooser.showOpenDialog(null);
+        if (response == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();            
+            myTableModel.openSamples(file.getAbsolutePath());
+        }
     }
     private void showFilterMenu(JButton button){
         JPopupMenu filterMenu = new JPopupMenu();
