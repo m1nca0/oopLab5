@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableRowSorter;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,31 +13,74 @@ public class DawView extends JFrame {
 
     public DawView() {
         this.daw = new Daw();
+
         myTableModel = new MyTable(this.daw);
         JTable table = new JTable(myTableModel);
+        table.setAutoCreateRowSorter(true);
+        TableRowSorter<MyTable> sorter = new TableRowSorter<>(myTableModel);
+        table.setRowSorter(sorter);
 
         JScrollPane scrollPane = new JScrollPane(table);
         JButton addButton = new JButton("Добавить");
         JButton deleteButton = new JButton("Удалить");
+        JLabel searchLabel = new JLabel(" Поиск: ");
+        JTextField searchField = new JTextField(15);
+        JButton filterButton = new JButton("Фильтр");
+
+        searchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+            @Override
+            public void insertUpdate(javax.swing.event.DocumentEvent e) { applyFilter(); }
+            @Override
+            public void removeUpdate(javax.swing.event.DocumentEvent e) { applyFilter(); }
+            @Override
+            public void changedUpdate(javax.swing.event.DocumentEvent e) { applyFilter(); }
+
+            private void applyFilter() {
+                String text = searchField.getText();
+                if (text.trim().length() == 0) {
+                    sorter.setRowFilter(null); 
+                } else {
+                    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+                }
+            }
+        });
 
         setSize(700, 500);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
+
+
 
         JToolBar toolBar = new JToolBar();
         toolBar.setFloatable(false);
         toolBar.add(addButton);
         toolBar.addSeparator();
         toolBar.add(deleteButton);
+        toolBar.addSeparator();
+        toolBar.add(searchLabel);
+        toolBar.add(searchField);
 
         add(toolBar, BorderLayout.NORTH);
-
         add(scrollPane, BorderLayout.CENTER);
 
         addButton.addActionListener(e -> showAddMenu(addButton));
         deleteButton.addActionListener(e -> showDeleteMenu());
+        // filterButton.addActionListener();
+
         setVisible(true);
     }
+    private void showFilterMenu(){
+        JPopupMenu filterMenu = new JPopupMenu();
+
+        JMenuItem typeIteme = new JMenuItem("Тип");
+        JMenuItem nameIteme = new JMenuItem("Название");
+        JMenuItem lenIteme = new JMenuItem("Длина");
+        JMenuItem volumeIteme = new JMenuItem("Громкость");
+
+
+    }
+
+
     private void showDeleteMenu(){
         JTextField nameSample = new JTextField();
         JTextField typeSample = new JTextField();
