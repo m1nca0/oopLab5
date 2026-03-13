@@ -72,7 +72,7 @@ public class Daw {
     public List<Sample> getSamples() {
         return new ArrayList<>(samples);
     }
-    
+
     public int getSamplesCount() {
         return samples.size();
     }
@@ -91,6 +91,7 @@ public class Daw {
                     }
                     else{
                         samples.remove(i);
+                        System.out.println("УДАЛЕН");
                         return true;
                     }
                 }

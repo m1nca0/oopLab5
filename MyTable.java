@@ -84,5 +84,9 @@ public class MyTable extends AbstractTableModel {
         this.daw.CreateSample(sample);
         this.fireTableDataChanged();
     }
+    public void deleteSamples(String name, String type) {
+        this.daw.findSample(name,type,false);
+        this.fireTableDataChanged();
+    }
 }
 
