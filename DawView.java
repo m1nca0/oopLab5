@@ -10,7 +10,7 @@ public class DawView extends JFrame {
     private Daw daw;
     private MyTable myTableModel;
     private JComboBox<JButton> addSample;
-
+    private int rowIndex = 0;
     public DawView() {
         this.daw = new Daw();
 
@@ -40,7 +40,7 @@ public class DawView extends JFrame {
                 if (text.trim().length() == 0) {
                     sorter.setRowFilter(null); 
                 } else {
-                    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+                    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text, rowIndex));
                 }
             }
         });
@@ -49,13 +49,13 @@ public class DawView extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-
-
         JToolBar toolBar = new JToolBar();
         toolBar.setFloatable(false);
         toolBar.add(addButton);
         toolBar.addSeparator();
         toolBar.add(deleteButton);
+        toolBar.addSeparator();
+        toolBar.add(filterButton);
         toolBar.addSeparator();
         toolBar.add(searchLabel);
         toolBar.add(searchField);
@@ -65,19 +65,27 @@ public class DawView extends JFrame {
 
         addButton.addActionListener(e -> showAddMenu(addButton));
         deleteButton.addActionListener(e -> showDeleteMenu());
-        // filterButton.addActionListener();
+        filterButton.addActionListener(e -> showFilterMenu(filterButton));
 
         setVisible(true);
     }
-    private void showFilterMenu(){
+    private void showFilterMenu(JButton button){
         JPopupMenu filterMenu = new JPopupMenu();
 
         JMenuItem typeIteme = new JMenuItem("Тип");
+        typeIteme.addActionListener(e -> rowIndex = 1);
         JMenuItem nameIteme = new JMenuItem("Название");
+        nameIteme.addActionListener(e -> rowIndex = 2);
         JMenuItem lenIteme = new JMenuItem("Длина");
+        lenIteme.addActionListener(e -> rowIndex = 3);
         JMenuItem volumeIteme = new JMenuItem("Громкость");
+        volumeIteme.addActionListener(e -> rowIndex = 4);
 
-
+        filterMenu.add(typeIteme);
+        filterMenu.add(nameIteme);
+        filterMenu.add(lenIteme);
+        filterMenu.add(volumeIteme);
+        filterMenu.show(button, 0, button.getHeight());
     }
 
 
