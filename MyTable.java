@@ -94,5 +94,8 @@ public class MyTable extends AbstractTableModel {
         this.daw = inOut.loadProject(way);
         this.fireTableDataChanged();
     }
+    public void saveSamples(String way){
+        inOut.saveProject(daw, way);
+    }
 }
 

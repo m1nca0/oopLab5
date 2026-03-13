@@ -76,14 +76,34 @@ public class DawView extends JFrame {
         deleteButton.addActionListener(e -> showDeleteMenu());
         filterButton.addActionListener(e -> showFilterMenu(filterButton));
         openButton.addActionListener(e -> showFileList());
+        saveButton.addActionListener(e -> saveProjectToFile());
 
         setVisible(true);
     }
+
+    private void saveProjectToFile() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Сохранить проект");
+
+        int userSelection = fileChooser.showSaveDialog(this);
+    
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            java.io.File fileToSave = fileChooser.getSelectedFile();
+            String way = fileToSave.getAbsolutePath();
+    
+            if (!way.toLowerCase().endsWith(".txt")) {
+                way += ".txt";
+            }
+            System.out.print(daw.getSamplesCount());
+            myTableModel.saveSamples(way);
+        }
+    }
+
     private void showFileList(){
 
         int response = fileChooser.showOpenDialog(null);
         if (response == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();            
+            File file = fileChooser.getSelectedFile();
             myTableModel.openSamples(file.getAbsolutePath());
         }
     }
@@ -98,11 +118,33 @@ public class DawView extends JFrame {
         lenIteme.addActionListener(e -> rowIndex = 3);
         JMenuItem volumeIteme = new JMenuItem("Громкость");
         volumeIteme.addActionListener(e -> rowIndex = 4);
+        JMenuItem lowIteme = new JMenuItem("Низ");
+        lowIteme.addActionListener(e -> rowIndex = 5);
+        JMenuItem highIteme = new JMenuItem("Вверх");
+        highIteme.addActionListener(e -> rowIndex = 6);
+        JMenuItem bassIteme = new JMenuItem("Басс");
+        bassIteme.addActionListener(e -> rowIndex = 7);
+        JMenuItem resIteme = new JMenuItem("Резонанс");
+        resIteme.addActionListener(e -> rowIndex = 8);
+        JMenuItem punchIteme = new JMenuItem("Удар");
+        punchIteme.addActionListener(e -> rowIndex = 9);
+        JMenuItem tailIteme = new JMenuItem("Длина хвоста");
+        tailIteme.addActionListener(e -> rowIndex = 10);
+        JMenuItem openCloseIteme = new JMenuItem("Закрытый/Открытый");
+        openCloseIteme.addActionListener(e -> rowIndex = 11);
 
         filterMenu.add(typeIteme);
         filterMenu.add(nameIteme);
         filterMenu.add(lenIteme);
         filterMenu.add(volumeIteme);
+        filterMenu.add(lowIteme);
+        filterMenu.add(highIteme);
+        filterMenu.add(bassIteme);
+        filterMenu.add(resIteme);
+        filterMenu.add(punchIteme);
+        filterMenu.add(tailIteme);
+        filterMenu.add(lenIteme);
+        filterMenu.add(openCloseIteme);
         filterMenu.show(button, 0, button.getHeight());
     }
 
