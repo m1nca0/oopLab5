@@ -1,20 +1,20 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class DawView extends JFrame {
     private Daw daw;
-    private Kick kick;
-    private Snare snare;
-    private Hat hat;
     private MyTable myTableModel;
     private JComboBox<JButton> addSample;
 
     public DawView() {
-        Daw daw = new Daw();
-        myTableModel = new MyTable(daw);
+        this.daw = new Daw();
+        myTableModel = new MyTable(this.daw);
         JTable table = new JTable(myTableModel);
+
         JScrollPane scrollPane = new JScrollPane(table);
         JButton addButton = new JButton("Добавить");
 

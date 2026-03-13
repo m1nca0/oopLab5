@@ -72,6 +72,14 @@ public class Daw {
     public List<Sample> getSamples() {
         return new ArrayList<>(samples);
     }
+    
+    public int getSamplesCount() {
+        return samples.size();
+    }
+
+    public Sample getSample(int index) {
+        return samples.get(index);
+    }
     public boolean findSample(String name, String typeOfSample, boolean delFalseFindTrue) {
         if ("KICK".equals(typeOfSample)) {
             for (int i = 0; i < samples.size(); i++) {

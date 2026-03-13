@@ -9,7 +9,7 @@ public class MyTable extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-        return daw.getSamples().size();
+        return daw.getSamplesCount();
     }
 
     @Override
@@ -51,39 +51,35 @@ public class MyTable extends AbstractTableModel {
     }
 
     @Override
-    public Object getValueAt(int rowIndex, int columnIndex){
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        Sample sample = daw.getSample(rowIndex);
+        
+        if (sample == null) return "";
+
         switch (columnIndex) {
-            case 0:
-                return rowIndex+1;
-            case 1:
-                return daw.getSamples().get(rowIndex).getType();
-            case 2:
-                return daw.getSamples().get(rowIndex).getName();
-            case 3:
-                return daw.getSamples().get(rowIndex).getLengthMs();
-            case 4:
-                return daw.getSamples().get(rowIndex).getVolume();
-            case 5:
-                return daw.getSamples().get(rowIndex).getLowFrequency();
-            case 6:
-                return daw.getSamples().get(rowIndex).getHighFrequency();
-            case 7:
-                return ((Kick) daw.getSamples().get(rowIndex)).getBassLevel();
-            case 8:
-                return ((Snare)daw.getSamples().get(rowIndex)).getResonance();
-            case 9:
-                return ((Snare)daw.getSamples().get(rowIndex)).getPunch();
-            case 10:
-                return ((Hat)daw.getSamples().get(rowIndex)).getTailLength();
-            case 11:
-                return ((Hat)daw.getSamples().get(rowIndex)).isClosed();
-            case 12:
-                return daw.getSamples().get(rowIndex).getName();
-            default:
+            case 0: return rowIndex + 1;
+            case 1: return sample.getType();
+            case 2: return sample.getName();
+            case 3: return sample.getLengthMs();
+            case 4: return sample.getVolume();
+            case 5: return sample.getLowFrequency();
+            case 6: return sample.getHighFrequency();
+            case 7: 
+                return (sample instanceof Kick) ? ((Kick) sample).getBassLevel() : "-";
+            case 8: 
+                return (sample instanceof Snare) ? ((Snare) sample).getResonance() : "-";
+            case 9: 
+                return (sample instanceof Snare) ? ((Snare) sample).getPunch() : "-";
+            case 10: 
+                return (sample instanceof Hat) ? ((Hat) sample).getTailLength() : "-";
+            case 11: 
+                return (sample instanceof Hat) ? (((Hat) sample).isClosed() ? "Закрыт" : "Открыт") : "-";
+            case 12: 
+                return sample.getName();
+            default: 
                 return "";
         }
     }
-
     public void addSamples(Sample sample) {
         this.daw.CreateSample(sample);
         this.fireTableDataChanged();
