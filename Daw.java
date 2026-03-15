@@ -15,60 +15,6 @@ public class Daw {
             System.out.println("Сэмпл с названием " + sample.getName() + " уже существует");
         }
     }
-
-    public void playSample(String typeOfSample)
-    {
-        if ("KICK".equals(typeOfSample)) samples.get(currentSample).playFallbackSound();
-        else if ("SNARE".equals(typeOfSample)) samples.get(currentSample).playFallbackSound();
-        else samples.get(currentSample).playFallbackSound();
-    }
-
-    public void increaseHatTail() {
-            ((Hat)samples.get(currentSample)).increaseTail();
-    }
-    
-    public void decreaseHatTail() {
-            ((Hat)samples.get(currentSample)).decreaseTail();
-    }
-    
-    public void toggleHatClosed() {
-            ((Hat)samples.get(currentSample)).toggleClosed();
-    }
-    
-    public void applyEffect(String typeOfSample) {
-        if ("KICK".equals(typeOfSample)) ((Kick)samples.get(currentSample)).FX();
-        else if ("SNARE".equals(typeOfSample)) ((Snare)samples.get(currentSample)).FX();
-        else ((Hat)samples.get(currentSample)).FX();
-    }
-    
-    public void increaseKickBass() {
-            ((Kick)samples.get(currentSample)).increaseBass();
-    }
-    
-    public void decreaseKickBass() {
-            ((Kick)samples.get(currentSample)).decreaseBass();
-    }
-    
-    public void increaseSnarePunch() {
-            ((Snare)samples.get(currentSample)).increasePunch();
-    }
-    
-    public void decreaseSnarePunch() {
-            ((Snare)samples.get(currentSample)).decreasePunch();
-    }
-    public void printInfo(String typeOfSample) {
-        if ("KICK".equals(typeOfSample)) ((Kick)samples.get(currentSample)).printInfo();
-        else if ("SNARE".equals(typeOfSample))((Snare)samples.get(currentSample)).printInfo();
-        else ((Hat)samples.get(currentSample)).printInfo();
-    }
-    
-    public void printAllInfo() {
-        System.out.println("\n=== ВСЕ СЭМПЛЫ ===");
-        for (int i = 0; i < samples.size(); i++) {
-            samples.get(i).printInfo();
-        }
-        System.out.println("Общее количество сэмплов: " + samples.size());
-    }
     public List<Sample> getSamples() {
         return new ArrayList<>(samples);
     }

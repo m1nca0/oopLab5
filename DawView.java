@@ -1,19 +1,15 @@
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableRowSorter;
-
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 
 public class DawView extends JFrame {
     private Daw daw;
     private DawInOut inOut;
     private MyTable myTableModel;
-    private JComboBox<JButton> addSample;
     private int rowIndex = 0;
     private JFileChooser fileChooser = new JFileChooser();
+
     public DawView() {
         this.daw = new Daw();
         this.inOut = new DawInOut();

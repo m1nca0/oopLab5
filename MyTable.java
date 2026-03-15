@@ -16,7 +16,7 @@ public class MyTable extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 13;
+        return 12;
     }
 
     @Override
@@ -46,8 +46,6 @@ public class MyTable extends AbstractTableModel {
                 return "Длина хвоста";
             case 11:
                 return "Закрытый/Открытый";
-            case 12:
-              return "Звук";
             default:return "";
         }
     }
@@ -76,8 +74,6 @@ public class MyTable extends AbstractTableModel {
                 return (sample instanceof Hat) ? ((Hat) sample).getTailLength() : "-";
             case 11: 
                 return (sample instanceof Hat) ? (((Hat) sample).isClosed() ? "Закрыт" : "Открыт") : "-";
-            case 12: 
-                return sample.getName();
             default: 
                 return "";
         }
