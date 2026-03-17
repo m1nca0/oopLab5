@@ -1,6 +1,8 @@
 import javax.swing.*;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 
 public class DawView extends JFrame {
@@ -30,16 +32,24 @@ public class DawView extends JFrame {
 
         searchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
             @Override
-            public void insertUpdate(javax.swing.event.DocumentEvent e) { applyFilter(); }
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                applyFilter();
+            }
+
             @Override
-            public void removeUpdate(javax.swing.event.DocumentEvent e) { applyFilter(); }
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                applyFilter();
+            }
+
             @Override
-            public void changedUpdate(javax.swing.event.DocumentEvent e) { applyFilter(); }
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                applyFilter();
+            }
 
             private void applyFilter() {
                 String text = searchField.getText();
                 if (text.trim().length() == 0) {
-                    sorter.setRowFilter(null); 
+                    sorter.setRowFilter(null);
                 } else {
                     sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text, rowIndex));
                 }
@@ -67,12 +77,41 @@ public class DawView extends JFrame {
 
         add(toolBar, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
+        
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showAddMenu(addButton);
+            } 
+        });
 
-        addButton.addActionListener(e -> showAddMenu(addButton));
-        deleteButton.addActionListener(e -> showDeleteMenu());
-        filterButton.addActionListener(e -> showFilterMenu(filterButton));
-        openButton.addActionListener(e -> showFileList());
-        saveButton.addActionListener(e -> saveProjectToFile());
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              showDeleteMenu();
+            }
+        });
+
+        filterButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              showFilterMenu(filterButton);
+            }
+        });
+
+        openButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              showFileList();
+            }
+        });
+
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              saveProjectToFile();
+            }
+        });
 
         setVisible(true);
     }
@@ -82,11 +121,11 @@ public class DawView extends JFrame {
         fileChooser.setDialogTitle("Сохранить проект");
 
         int userSelection = fileChooser.showSaveDialog(this);
-    
+
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             java.io.File fileToSave = fileChooser.getSelectedFile();
             String way = fileToSave.getAbsolutePath();
-    
+
             if (!way.toLowerCase().endsWith(".txt")) {
                 way += ".txt";
             }
@@ -95,7 +134,7 @@ public class DawView extends JFrame {
         }
     }
 
-    private void showFileList(){
+    private void showFileList() {
 
         int response = fileChooser.showOpenDialog(null);
         if (response == JFileChooser.APPROVE_OPTION) {
@@ -103,7 +142,8 @@ public class DawView extends JFrame {
             myTableModel.openSamples(file.getAbsolutePath());
         }
     }
-    private void showFilterMenu(JButton button){
+
+    private void showFilterMenu(JButton button) {
         JPopupMenu filterMenu = new JPopupMenu();
 
         JMenuItem typeIteme = new JMenuItem("Тип");
@@ -144,26 +184,24 @@ public class DawView extends JFrame {
         filterMenu.show(button, 0, button.getHeight());
     }
 
-
-    private void showDeleteMenu(){
+    private void showDeleteMenu() {
         JTextField nameSample = new JTextField();
         JTextField typeSample = new JTextField();
-        JPanel deletePanel = new JPanel(new GridLayout(2,2,5,5));
+        JPanel deletePanel = new JPanel(new GridLayout(2, 2, 5, 5));
         deletePanel.add(new JLabel("Название:"));
         deletePanel.add(nameSample);
         deletePanel.add(new JLabel("Тип:"));
         deletePanel.add(typeSample);
 
         int result = JOptionPane.showConfirmDialog(
-            this,
-            deletePanel,
-            "Удаление сэмпла",
-            JOptionPane.OK_CANCEL_OPTION,
-            JOptionPane.PLAIN_MESSAGE
-        );
-        if (result == JOptionPane.OK_OPTION){
+                this,
+                deletePanel,
+                "Удаление сэмпла",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
             if (nameSample.getText().trim().isEmpty() ||
-                typeSample.getText().trim().isEmpty()){
+                    typeSample.getText().trim().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Для удаления заполните все поля!");
                 return;
             }
@@ -173,8 +211,7 @@ public class DawView extends JFrame {
         }
     }
 
-    private void showAddMenu(JButton button)
-    {
+    private void showAddMenu(JButton button) {
         JPopupMenu menu = new JPopupMenu();
 
         JMenuItem kickItem = new JMenuItem("Добавить KICK");
@@ -186,13 +223,13 @@ public class DawView extends JFrame {
         JMenuItem hatItem = new JMenuItem("Добавить HAT");
         hatItem.addActionListener(e -> showHatDialog());
 
-
         menu.add(kickItem);
         menu.add(snareItem);
         menu.add(hatItem);
         menu.show(button, 0, button.getHeight());
     }
-    private void showKickDialog(){
+
+    private void showKickDialog() {
         JTextField nameKick = new JTextField(15);
         JTextField lenKick = new JTextField(15);
         JTextField volumeKick = new JTextField(15);
@@ -215,20 +252,19 @@ public class DawView extends JFrame {
         panel.add(bassLevelKick);
 
         int result = JOptionPane.showConfirmDialog(
-            this,
-            panel,
-            "Добавление kick'а",
-            JOptionPane.OK_CANCEL_OPTION,
-            JOptionPane.PLAIN_MESSAGE
-        );
+                this,
+                panel,
+                "Добавление kick'а",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             if (nameKick.getText().trim().isEmpty() ||
-                lenKick.getText().trim().isEmpty() ||
-                volumeKick.getText().trim().isEmpty() ||
-                lowFrequencyKick.getText().trim().isEmpty() ||
-                highFrequencyKick.getText().trim().isEmpty() ||
-                bassLevelKick.getText().trim().isEmpty()) {
-                
+                    lenKick.getText().trim().isEmpty() ||
+                    volumeKick.getText().trim().isEmpty() ||
+                    lowFrequencyKick.getText().trim().isEmpty() ||
+                    highFrequencyKick.getText().trim().isEmpty() ||
+                    bassLevelKick.getText().trim().isEmpty()) {
+
                 JOptionPane.showMessageDialog(this, "Для добавления сэмпла заполните все поля!");
 
             }
@@ -242,14 +278,16 @@ public class DawView extends JFrame {
 
                 Kick kick = new Kick(name, len, volume, lowFrequency, highFrequency, bassLevel);
                 myTableModel.addSamples(kick);
-                JOptionPane.showMessageDialog(this, "Kick - " + name + " успешно добавлен!");                
+                JOptionPane.showMessageDialog(this, "Kick - " + name + " успешно добавлен!");
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Введите корректные значения в поля \n Если поле подразумевает числовое значение, не вводите текст \n Для дробных значений используйте '.'");
+                JOptionPane.showMessageDialog(this,
+                        "Введите корректные значения в поля \n Если поле подразумевает числовое значение, не вводите текст \n Для дробных значений используйте '.'");
             }
 
         }
     }
-    private void showSnareDialog(){
+
+    private void showSnareDialog() {
         JTextField nameSnare = new JTextField(15);
         JTextField lenSnare = new JTextField(15);
         JTextField volumeSnare = new JTextField(15);
@@ -272,24 +310,23 @@ public class DawView extends JFrame {
         panel.add(new JLabel("Резонанс: "));
         panel.add(resonanceSnare);
         panel.add(new JLabel("Удар: "));
-        panel.add(punchSnare);        
+        panel.add(punchSnare);
 
         int result = JOptionPane.showConfirmDialog(
-            this,
-            panel,
-            "Добавление snare'а",
-            JOptionPane.OK_CANCEL_OPTION,
-            JOptionPane.PLAIN_MESSAGE
-        );
+                this,
+                panel,
+                "Добавление snare'а",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             if (nameSnare.getText().trim().isEmpty() ||
-                lenSnare.getText().trim().isEmpty() ||
-                volumeSnare.getText().trim().isEmpty() ||
-                lowFrequencySnare.getText().trim().isEmpty() ||
-                highFrequencySnare.getText().trim().isEmpty() ||
-                resonanceSnare.getText().trim().isEmpty() ||
-                punchSnare.getText().trim().isEmpty()) {
-                
+                    lenSnare.getText().trim().isEmpty() ||
+                    volumeSnare.getText().trim().isEmpty() ||
+                    lowFrequencySnare.getText().trim().isEmpty() ||
+                    highFrequencySnare.getText().trim().isEmpty() ||
+                    resonanceSnare.getText().trim().isEmpty() ||
+                    punchSnare.getText().trim().isEmpty()) {
+
                 JOptionPane.showMessageDialog(this, "Для добавления сэмпла заполните все поля!");
 
             }
@@ -304,16 +341,16 @@ public class DawView extends JFrame {
 
                 Snare snare = new Snare(name, len, volume, lowFrequency, highFrequency, resonance, punch);
                 myTableModel.addSamples(snare);
-                JOptionPane.showMessageDialog(this, "Snare - " + name + " успешно добавлен!");                
+                JOptionPane.showMessageDialog(this, "Snare - " + name + " успешно добавлен!");
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Введите корректные значения в поля \n Если поле подразумевает числовое значение, не вводите текст \n Для дробных значений используйте '.'");
+                JOptionPane.showMessageDialog(this,
+                        "Введите корректные значения в поля \n Если поле подразумевает числовое значение, не вводите текст \n Для дробных значений используйте '.'");
             }
 
         }
     }
 
-
-    private void showHatDialog(){
+    private void showHatDialog() {
         JTextField nameHat = new JTextField(15);
         JTextField lenHat = new JTextField(15);
         JTextField volumeHat = new JTextField(15);
@@ -339,40 +376,38 @@ public class DawView extends JFrame {
         panel.add(closedHat);
 
         int result = JOptionPane.showConfirmDialog(
-            this,
-            panel,
-            "Добавление Hat'а",
-            JOptionPane.OK_CANCEL_OPTION,
-            JOptionPane.PLAIN_MESSAGE
-        );
+                this,
+                panel,
+                "Добавление Hat'а",
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             if (nameHat.getText().trim().isEmpty() ||
-                lenHat.getText().trim().isEmpty() ||
-                volumeHat.getText().trim().isEmpty() ||
-                lowFrequencyHat.getText().trim().isEmpty() ||
-                highFrequencyHat.getText().trim().isEmpty() ||
-                tailLengthHat.getText().trim().isEmpty() ||
-                closedHat.getText().trim().isEmpty()) {
-                
+                    lenHat.getText().trim().isEmpty() ||
+                    volumeHat.getText().trim().isEmpty() ||
+                    lowFrequencyHat.getText().trim().isEmpty() ||
+                    highFrequencyHat.getText().trim().isEmpty() ||
+                    tailLengthHat.getText().trim().isEmpty() ||
+                    closedHat.getText().trim().isEmpty()) {
+
                 JOptionPane.showMessageDialog(this, "Для добавления сэмпла заполните все поля!");
 
             }
-            try{
+            try {
                 String name = nameHat.getText().trim();
                 int len = Integer.parseInt(lenHat.getText().trim());
                 double volume = Double.parseDouble(volumeHat.getText().trim());
                 int lowFrequency = Integer.parseInt(lowFrequencyHat.getText().trim());
                 int highFrequency = Integer.parseInt(highFrequencyHat.getText().trim());
                 int tailLength = Integer.parseInt(tailLengthHat.getText().trim());
-                boolean closed = tailLengthHat.getText().trim() == "Закрытый" ? false : true;     
+                boolean closed = tailLengthHat.getText().trim() == "Закрытый" ? false : true;
                 Hat hat = new Hat(name, len, volume, lowFrequency, highFrequency, tailLength, closed);
                 myTableModel.addSamples(hat);
-                JOptionPane.showMessageDialog(this, "Hat - " + name + " успешно добавлен!");                           
+                JOptionPane.showMessageDialog(this, "Hat - " + name + " успешно добавлен!");
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Введите корректные значения в поля \n Если поле подразумевает числовое значение, не вводите текст \n Для дробных значений используйте '.'");
+                JOptionPane.showMessageDialog(this,
+                        "Введите корректные значения в поля \n Если поле подразумевает числовое значение, не вводите текст \n Для дробных значений используйте '.'");
             }
-
-
 
         }
     }
