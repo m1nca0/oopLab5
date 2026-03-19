@@ -6,14 +6,37 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 public class DawView extends JFrame {
-    //ghbdtn 
     private Daw daw;
     private DawInOut inOut;
     private MyTable myTableModel;
     private int rowIndex = 0;
     private JFileChooser fileChooser = new JFileChooser();
+    private Controller controller = new Controller();
+
+        JTextField nameSample = new JTextField();
+        JTextField typeSample = new JTextField();    
+
+
+        JTextField nameKick = new JTextField(15);
+        JTextField lenKick = new JTextField(15);
+        JTextField volumeKick = new JTextField(15);
+        JTextField lowFrequencyKick = new JTextField(15);
+        JTextField highFrequencyKick = new JTextField(15);
+        JTextField bassLevelKick = new JTextField(15);
+
+
+        JTextField nameSnare = new JTextField(15);
+        JTextField lenSnare = new JTextField(15);
+        JTextField volumeSnare = new JTextField(15);
+        JTextField lowFrequencySnare = new JTextField(15);
+        JTextField highFrequencySnare = new JTextField(15);
+        JTextField resonanceSnare = new JTextField(15);
+        JTextField punchSnare = new JTextField(15);
 
     public DawView() {
+
+
+
         this.daw = new Daw();
         this.inOut = new DawInOut();
         myTableModel = new MyTable(this.daw, this.inOut);
@@ -21,6 +44,8 @@ public class DawView extends JFrame {
         table.setAutoCreateRowSorter(true);
         TableRowSorter<MyTable> sorter = new TableRowSorter<>(myTableModel);
         table.setRowSorter(sorter);
+
+
 
         JScrollPane scrollPane = new JScrollPane(table);
         JButton openButton = new JButton("Открыть");
@@ -127,20 +152,15 @@ public class DawView extends JFrame {
             java.io.File fileToSave = fileChooser.getSelectedFile();
             String way = fileToSave.getAbsolutePath();
 
-            if (!way.toLowerCase().endsWith(".txt")) {
-                way += ".txt";
-            }
-            System.out.print(daw.getSamplesCount());
-            myTableModel.saveSamples(way);
+            controller.saveProjectToFile(way);
         }
     }
 
     private void showFileList() {
-
         int response = fileChooser.showOpenDialog(null);
         if (response == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-            myTableModel.openSamples(file.getAbsolutePath());
+            controller.showFileList(file);
         }
     }
 
@@ -185,9 +205,13 @@ public class DawView extends JFrame {
         filterMenu.show(button, 0, button.getHeight());
     }
 
+    private String getNameSample(){
+        return nameSample.getText().trim();
+    }
+    private String getTypeSample(){
+        return typeSample.getText().trim();
+    }
     private void showDeleteMenu() {
-        JTextField nameSample = new JTextField();
-        JTextField typeSample = new JTextField();
         JPanel deletePanel = new JPanel(new GridLayout(2, 2, 5, 5));
         deletePanel.add(new JLabel("Название:"));
         deletePanel.add(nameSample);
@@ -201,14 +225,7 @@ public class DawView extends JFrame {
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
-            if (nameSample.getText().trim().isEmpty() ||
-                    typeSample.getText().trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Для удаления заполните все поля!");
-                return;
-            }
-            String name = nameSample.getText().trim();
-            String type = typeSample.getText().trim();
-            myTableModel.deleteSamples(name, type);
+            controller.showDeleteMenu(getNameSample(), getTypeSample());
         }
     }
 
@@ -216,28 +233,55 @@ public class DawView extends JFrame {
         JPopupMenu menu = new JPopupMenu();
 
         JMenuItem kickItem = new JMenuItem("Добавить KICK");
-        kickItem.addActionListener(e -> showKickDialog());
+        kickItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showKickDialog();
+            }
+        });
 
         JMenuItem snareItem = new JMenuItem("Добавить SNARE");
-        snareItem.addActionListener(e -> showSnareDialog());
+        snareItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showSnareDialog();
+            }
+        });
 
         JMenuItem hatItem = new JMenuItem("Добавить HAT");
-        hatItem.addActionListener(e -> showHatDialog());
-
+        hatItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showHatDialog();
+            }
+        });
         menu.add(kickItem);
         menu.add(snareItem);
         menu.add(hatItem);
         menu.show(button, 0, button.getHeight());
     }
 
-    private void showKickDialog() {
-        JTextField nameKick = new JTextField(15);
-        JTextField lenKick = new JTextField(15);
-        JTextField volumeKick = new JTextField(15);
-        JTextField lowFrequencyKick = new JTextField(15);
-        JTextField highFrequencyKick = new JTextField(15);
-        JTextField bassLevelKick = new JTextField(15);
 
+
+    private String getNameKick(){
+        return nameKick.getText().trim();
+    }
+    private String getLenKick(){
+        return lenKick.getText().trim();
+    }
+        private String getVolumeKick(){
+        return volumeKick.getText().trim();
+    }
+    private String getLowFrequencyKick(){
+        return lowFrequencyKick.getText().trim();
+    }
+        private String getHighFrequencyKick(){
+        return highFrequencyKick.getText().trim();
+    }
+    private String getBassLevelKick(){
+        return bassLevelKick.getText().trim();
+    }
+    private void showKickDialog() {
         JPanel panel = new JPanel(new GridLayout(6, 2, 5, 5));
         panel.add(new JLabel("Название: "));
         panel.add(nameKick);
@@ -259,43 +303,30 @@ public class DawView extends JFrame {
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
-            if (nameKick.getText().trim().isEmpty() ||
-                    lenKick.getText().trim().isEmpty() ||
-                    volumeKick.getText().trim().isEmpty() ||
-                    lowFrequencyKick.getText().trim().isEmpty() ||
-                    highFrequencyKick.getText().trim().isEmpty() ||
-                    bassLevelKick.getText().trim().isEmpty()) {
-
-                JOptionPane.showMessageDialog(this, "Для добавления сэмпла заполните все поля!");
-
-            }
-            try {
-                String name = nameKick.getText().trim();
-                int len = Integer.parseInt(lenKick.getText().trim());
-                double volume = Double.parseDouble(volumeKick.getText().trim());
-                int lowFrequency = Integer.parseInt(lowFrequencyKick.getText().trim());
-                int highFrequency = Integer.parseInt(highFrequencyKick.getText().trim());
-                int bassLevel = Integer.parseInt(bassLevelKick.getText().trim());
-
-                Kick kick = new Kick(name, len, volume, lowFrequency, highFrequency, bassLevel);
-                myTableModel.addSamples(kick);
-                JOptionPane.showMessageDialog(this, "Kick - " + name + " успешно добавлен!");
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this,
-                        "Введите корректные значения в поля \n Если поле подразумевает числовое значение, не вводите текст \n Для дробных значений используйте '.'");
-            }
-
+            controller.showKickDialog(getNameKick(),getLenKick(),getVolumeKick(),getLowFrequencyKick(),getHighFrequencyKick(),getBassLevelKick());
         }
     }
 
+
+    private String getNameSnare(){
+        return nameSnare.getText().trim();
+    }
+    private String getLenSnare(){
+        return lenSnare.getText().trim();
+    }
+        private String getVolumeSnare(){
+        return volumeSnare.getText().trim();
+    }
+    private String getLowFrequencySnare(){
+        return lowFrequencySnare.getText().trim();
+    }
+        private String getHighFrequencySnare(){
+        return highFrequencySnare.getText().trim();
+    }
+    private String getBassLevelSnare(){
+        return bassLevelSnare.getText().trim();
+    }
     private void showSnareDialog() {
-        JTextField nameSnare = new JTextField(15);
-        JTextField lenSnare = new JTextField(15);
-        JTextField volumeSnare = new JTextField(15);
-        JTextField lowFrequencySnare = new JTextField(15);
-        JTextField highFrequencySnare = new JTextField(15);
-        JTextField resonanceSnare = new JTextField(15);
-        JTextField punchSnare = new JTextField(15);
 
         JPanel panel = new JPanel(new GridLayout(7, 2, 5, 5));
         panel.add(new JLabel("Название: "));
