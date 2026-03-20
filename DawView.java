@@ -177,27 +177,93 @@ public class DawView extends JFrame {
         JPopupMenu filterMenu = new JPopupMenu();
 
         JMenuItem typeIteme = new JMenuItem("Тип");
-        typeIteme.addActionListener(e -> rowIndex = 1);
+        typeIteme.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                rowIndex = 1;
+            }
+            
+        });
         JMenuItem nameIteme = new JMenuItem("Название");
-        nameIteme.addActionListener(e -> rowIndex = 2);
+        nameIteme.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                rowIndex = 2;
+            }
+            
+        });
         JMenuItem lenIteme = new JMenuItem("Длина");
-        lenIteme.addActionListener(e -> rowIndex = 3);
+        lenIteme.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                rowIndex = 3;
+            }
+            
+        });
         JMenuItem volumeIteme = new JMenuItem("Громкость");
-        volumeIteme.addActionListener(e -> rowIndex = 4);
+        volumeIteme.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                rowIndex = 4;
+            }
+            
+        });
         JMenuItem lowIteme = new JMenuItem("Низ");
-        lowIteme.addActionListener(e -> rowIndex = 5);
+        lowIteme.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                rowIndex = 5;
+            }
+            
+        });
         JMenuItem highIteme = new JMenuItem("Вверх");
-        highIteme.addActionListener(e -> rowIndex = 6);
+        highIteme.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                rowIndex = 6;
+            }
+            
+        });
         JMenuItem bassIteme = new JMenuItem("Басс");
-        bassIteme.addActionListener(e -> rowIndex = 7);
+        bassIteme.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                rowIndex = 7;
+            }
+            
+        });
         JMenuItem resIteme = new JMenuItem("Резонанс");
-        resIteme.addActionListener(e -> rowIndex = 8);
+        resIteme.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                rowIndex = 8;
+            }
+            
+        });
         JMenuItem punchIteme = new JMenuItem("Удар");
-        punchIteme.addActionListener(e -> rowIndex = 9);
+        punchIteme.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                rowIndex = 9;
+            }
+            
+        });
         JMenuItem tailIteme = new JMenuItem("Длина хвоста");
-        tailIteme.addActionListener(e -> rowIndex = 10);
+        tailIteme.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                rowIndex = 10;
+            }
+            
+        });
         JMenuItem openCloseIteme = new JMenuItem("Закрытый/Открытый");
-        openCloseIteme.addActionListener(e -> rowIndex = 11);
+        openCloseIteme.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                rowIndex = 11;
+            }
+            
+        });
 
         filterMenu.add(typeIteme);
         filterMenu.add(nameIteme);
