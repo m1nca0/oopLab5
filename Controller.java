@@ -1,5 +1,5 @@
-
-
+import javax.swing.JOptionPane;
+import javax.swing.*;
 public class Controller {
     private Daw daw;
     private DawInOut inOut;
@@ -23,10 +23,11 @@ public class Controller {
     }
 
     public void showDeleteMenu(String name, String type) {
-            if (name.isEmpty() ||
-                    type.isEmpty()) {
+            if (name.isEmpty() || type.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Для удаления заполните все поля!");
                 return;
             }
+            JOptionPane.showMessageDialog(null, "Сэмпл успешно удален!");
             myTableModel.deleteSamples(name, type);
         }
 
@@ -38,6 +39,7 @@ public class Controller {
                     lowFrequencyKick.isEmpty() ||
                     highFrequencyKick.isEmpty() ||
                     bassLevelKick.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Для добавления сэмпла заполните все поля!");
 
                 return;
             }
@@ -51,7 +53,9 @@ public class Controller {
 
                 Kick kick = new Kick(name, len, volume, lowFrequency, highFrequency, bassLevel);
                 myTableModel.addSamples(kick);
+                JOptionPane.showMessageDialog(null, "Kick - " + name + " успешно добавлен!");
             } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Введите корректные значения в поля \n Если поле подразумевает числовое значение, не вводите текст \n Для дробных значений используйте '.'");
             }
     }
 
@@ -63,6 +67,7 @@ public class Controller {
                 highFrequencySnare.isEmpty() ||
                 resonanceSnare.isEmpty() ||
                 punchSnare.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Для добавления сэмпла заполните все поля!");
 
             return;
         }
@@ -77,7 +82,9 @@ public class Controller {
 
             Snare snare = new Snare(name, len, volume, lowFrequency, highFrequency, resonance, punch);
             myTableModel.addSamples(snare);
+            JOptionPane.showMessageDialog(null, "Snare - " + name + " успешно добавлен!");
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,"Введите корректные значения в поля \n Если поле подразумевает числовое значение, не вводите текст \n Для дробных значений используйте '.'");
         }
     }
 
@@ -89,6 +96,8 @@ public class Controller {
                 highFrequencyHat.isEmpty() ||
                 tailLengthHat.isEmpty() ||
                 closedHat.isEmpty()) {
+            
+            JOptionPane.showMessageDialog(null, "Для добавления сэмпла заполните все поля!");
             return;
 
         }
@@ -102,7 +111,10 @@ public class Controller {
             boolean closed = closedHat == "Закрытый" ? false : true;
             Hat hat = new Hat(name, len, volume, lowFrequency, highFrequency, tailLength, closed);
             myTableModel.addSamples(hat);
+            JOptionPane.showMessageDialog(null, "Hat - " + name + " успешно добавлен!");
+
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(null,"Введите корректные значения в поля \n Если поле подразумевает числовое значение, не вводите текст \n Для дробных значений используйте '.'");
         }
 
     }

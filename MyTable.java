@@ -18,7 +18,24 @@ public class MyTable extends AbstractTableModel {
     public int getColumnCount() {
         return 12;
     }
-
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        switch (columnIndex) {
+            case 0: return Integer.class;
+            case 1: return String.class; 
+            case 2: return String.class; 
+            case 3: return Integer.class;
+            case 4: return Double.class; 
+            case 5: return Integer.class;
+            case 6: return Integer.class;
+            case 7: return Double.class; 
+            case 8: return Double.class; 
+            case 9: return Double.class;
+            case 10: return Double.class; 
+            case 11: return String.class;
+            default: return Object.class;
+        }
+    }
     @Override
     public String getColumnName(int columnIndex) {
         switch (columnIndex) {
@@ -65,15 +82,15 @@ public class MyTable extends AbstractTableModel {
             case 5: return sample.getLowFrequency();
             case 6: return sample.getHighFrequency();
             case 7: 
-                return (sample instanceof Kick) ? ((Kick) sample).getBassLevel() : "-";
+                return (sample instanceof Kick) ? ((Kick) sample).getBassLevel() : null;
             case 8: 
-                return (sample instanceof Snare) ? ((Snare) sample).getResonance() : "-";
+                return (sample instanceof Snare) ? ((Snare) sample).getResonance() : null;
             case 9: 
-                return (sample instanceof Snare) ? ((Snare) sample).getPunch() : "-";
+                return (sample instanceof Snare) ? ((Snare) sample).getPunch() : null;
             case 10: 
-                return (sample instanceof Hat) ? ((Hat) sample).getTailLength() : "-";
+                return (sample instanceof Hat) ? ((Hat) sample).getTailLength() : null;
             case 11: 
-                return (sample instanceof Hat) ? (((Hat) sample).isClosed() ? "Закрыт" : "Открыт") : "-";
+                return (sample instanceof Hat) ? (((Hat) sample).isClosed() ? "Закрыт" : "Открыт") : null;
             default: 
                 return "";
         }

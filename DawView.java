@@ -12,7 +12,7 @@ public class DawView extends JFrame {
     private int rowIndex = 0;
     private JFileChooser fileChooser = new JFileChooser();
     private Controller controller;
-
+    private JButton filterButton = new JButton("Параметр поиска");
         JTextField nameSample = new JTextField();
         JTextField typeSample = new JTextField();    
 
@@ -42,9 +42,6 @@ public class DawView extends JFrame {
         JTextField closedHat = new JTextField(15);
 
     public DawView() {
-
-
-
         this.daw = new Daw();
         this.inOut = new DawInOut();
         this.myTableModel = new MyTable(this.daw, this.inOut);
@@ -62,7 +59,6 @@ public class DawView extends JFrame {
         JButton deleteButton = new JButton("Удалить");
         JLabel searchLabel = new JLabel(" Поиск: ");
         JTextField searchField = new JTextField(15);
-        JButton filterButton = new JButton("Параметр поиска");
 
         searchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
             @Override
@@ -181,6 +177,7 @@ public class DawView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 rowIndex = 1;
+                filterButton.setText("Тип");
             }
             
         });
@@ -189,6 +186,7 @@ public class DawView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 rowIndex = 2;
+                filterButton.setText("Название");
             }
             
         });
@@ -197,6 +195,7 @@ public class DawView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 rowIndex = 3;
+                filterButton.setText("Длина");
             }
             
         });
@@ -205,6 +204,7 @@ public class DawView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 rowIndex = 4;
+                filterButton.setText("Громкость");
             }
             
         });
@@ -213,6 +213,7 @@ public class DawView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 rowIndex = 5;
+                filterButton.setText("Низ");
             }
             
         });
@@ -221,6 +222,7 @@ public class DawView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 rowIndex = 6;
+                filterButton.setText("Вверх");
             }
             
         });
@@ -229,6 +231,7 @@ public class DawView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 rowIndex = 7;
+                filterButton.setText("Басс");
             }
             
         });
@@ -237,6 +240,7 @@ public class DawView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 rowIndex = 8;
+                filterButton.setText("Резонанс");
             }
             
         });
@@ -245,6 +249,7 @@ public class DawView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 rowIndex = 9;
+                filterButton.setText("Удар");
             }
             
         });
@@ -253,6 +258,7 @@ public class DawView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 rowIndex = 10;
+                filterButton.setText("Длина хвоста");
             }
             
         });
@@ -261,6 +267,7 @@ public class DawView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 rowIndex = 11;
+                filterButton.setText("Закрытый/Открытый");
             }
             
         });
