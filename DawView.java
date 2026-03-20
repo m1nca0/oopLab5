@@ -11,7 +11,7 @@ public class DawView extends JFrame {
     private MyTable myTableModel;
     private int rowIndex = 0;
     private JFileChooser fileChooser = new JFileChooser();
-    private Controller controller = new Controller();
+    private Controller controller;
 
         JTextField nameSample = new JTextField();
         JTextField typeSample = new JTextField();    
@@ -33,19 +33,27 @@ public class DawView extends JFrame {
         JTextField resonanceSnare = new JTextField(15);
         JTextField punchSnare = new JTextField(15);
 
+        JTextField nameHat = new JTextField(15);
+        JTextField lenHat = new JTextField(15);
+        JTextField volumeHat = new JTextField(15);
+        JTextField lowFrequencyHat = new JTextField(15);
+        JTextField highFrequencyHat = new JTextField(15);
+        JTextField tailLengthHat = new JTextField(15);
+        JTextField closedHat = new JTextField(15);
+
     public DawView() {
 
 
 
         this.daw = new Daw();
         this.inOut = new DawInOut();
-        myTableModel = new MyTable(this.daw, this.inOut);
+        this.myTableModel = new MyTable(this.daw, this.inOut);
+        this.controller = new Controller(this.daw, this.inOut, this.myTableModel);
+
         JTable table = new JTable(myTableModel);
         table.setAutoCreateRowSorter(true);
         TableRowSorter<MyTable> sorter = new TableRowSorter<>(myTableModel);
         table.setRowSorter(sorter);
-
-
 
         JScrollPane scrollPane = new JScrollPane(table);
         JButton openButton = new JButton("Открыть");
@@ -160,7 +168,8 @@ public class DawView extends JFrame {
         int response = fileChooser.showOpenDialog(null);
         if (response == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-            controller.showFileList(file);
+            controller.showFileList(file.getAbsolutePath());
+            myTableModel.fireTableDataChanged();
         }
     }
 
@@ -226,6 +235,7 @@ public class DawView extends JFrame {
                 JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             controller.showDeleteMenu(getNameSample(), getTypeSample());
+            myTableModel.fireTableDataChanged();
         }
     }
 
@@ -304,6 +314,7 @@ public class DawView extends JFrame {
                 JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
             controller.showKickDialog(getNameKick(),getLenKick(),getVolumeKick(),getLowFrequencyKick(),getHighFrequencyKick(),getBassLevelKick());
+            myTableModel.fireTableDataChanged();
         }
     }
 
@@ -323,8 +334,11 @@ public class DawView extends JFrame {
         private String getHighFrequencySnare(){
         return highFrequencySnare.getText().trim();
     }
-    private String getBassLevelSnare(){
-        return bassLevelSnare.getText().trim();
+    private String getResonanceSnare(){
+        return resonanceSnare.getText().trim();
+    }
+    private String getPunchSnare(){
+        return punchSnare.getText().trim();
     }
     private void showSnareDialog() {
 
@@ -351,45 +365,33 @@ public class DawView extends JFrame {
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
-            if (nameSnare.getText().trim().isEmpty() ||
-                    lenSnare.getText().trim().isEmpty() ||
-                    volumeSnare.getText().trim().isEmpty() ||
-                    lowFrequencySnare.getText().trim().isEmpty() ||
-                    highFrequencySnare.getText().trim().isEmpty() ||
-                    resonanceSnare.getText().trim().isEmpty() ||
-                    punchSnare.getText().trim().isEmpty()) {
-
-                JOptionPane.showMessageDialog(this, "Для добавления сэмпла заполните все поля!");
-
-            }
-            try {
-                String name = nameSnare.getText().trim();
-                int len = Integer.parseInt(lenSnare.getText().trim());
-                double volume = Double.parseDouble(volumeSnare.getText().trim());
-                int lowFrequency = Integer.parseInt(lowFrequencySnare.getText().trim());
-                int highFrequency = Integer.parseInt(highFrequencySnare.getText().trim());
-                int resonance = Integer.parseInt(resonanceSnare.getText().trim());
-                int punch = Integer.parseInt(punchSnare.getText().trim());
-
-                Snare snare = new Snare(name, len, volume, lowFrequency, highFrequency, resonance, punch);
-                myTableModel.addSamples(snare);
-                JOptionPane.showMessageDialog(this, "Snare - " + name + " успешно добавлен!");
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this,
-                        "Введите корректные значения в поля \n Если поле подразумевает числовое значение, не вводите текст \n Для дробных значений используйте '.'");
-            }
-
+            controller.showSnareDialog(getNameSnare(),getLenSnare(),getVolumeSnare(),getLowFrequencySnare(),getHighFrequencySnare(),getResonanceSnare(),getPunchSnare());
+            myTableModel.fireTableDataChanged();
         }
     }
 
+    private String getNameHat(){
+        return nameHat.getText().trim();
+    }
+    private String getLenHat(){
+        return lenHat.getText().trim();
+    }
+        private String getVolumeHat(){
+        return volumeHat.getText().trim();
+    }
+    private String getLowFrequencyHat(){
+        return lowFrequencyHat.getText().trim();
+    }
+        private String getHighFrequencyHat(){
+        return highFrequencyHat.getText().trim();
+    }
+    private String getTailLengthHat(){
+        return tailLengthHat.getText().trim();
+    }
+    private String getClosedHat(){
+        return closedHat.getText().trim();
+    }
     private void showHatDialog() {
-        JTextField nameHat = new JTextField(15);
-        JTextField lenHat = new JTextField(15);
-        JTextField volumeHat = new JTextField(15);
-        JTextField lowFrequencyHat = new JTextField(15);
-        JTextField highFrequencyHat = new JTextField(15);
-        JTextField tailLengthHat = new JTextField(15);
-        JTextField closedHat = new JTextField(15);
 
         JPanel panel = new JPanel(new GridLayout(7, 2, 5, 5));
         panel.add(new JLabel("Название: "));
@@ -414,33 +416,8 @@ public class DawView extends JFrame {
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
-            if (nameHat.getText().trim().isEmpty() ||
-                    lenHat.getText().trim().isEmpty() ||
-                    volumeHat.getText().trim().isEmpty() ||
-                    lowFrequencyHat.getText().trim().isEmpty() ||
-                    highFrequencyHat.getText().trim().isEmpty() ||
-                    tailLengthHat.getText().trim().isEmpty() ||
-                    closedHat.getText().trim().isEmpty()) {
-
-                JOptionPane.showMessageDialog(this, "Для добавления сэмпла заполните все поля!");
-
-            }
-            try {
-                String name = nameHat.getText().trim();
-                int len = Integer.parseInt(lenHat.getText().trim());
-                double volume = Double.parseDouble(volumeHat.getText().trim());
-                int lowFrequency = Integer.parseInt(lowFrequencyHat.getText().trim());
-                int highFrequency = Integer.parseInt(highFrequencyHat.getText().trim());
-                int tailLength = Integer.parseInt(tailLengthHat.getText().trim());
-                boolean closed = tailLengthHat.getText().trim() == "Закрытый" ? false : true;
-                Hat hat = new Hat(name, len, volume, lowFrequency, highFrequency, tailLength, closed);
-                myTableModel.addSamples(hat);
-                JOptionPane.showMessageDialog(this, "Hat - " + name + " успешно добавлен!");
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this,
-                        "Введите корректные значения в поля \n Если поле подразумевает числовое значение, не вводите текст \n Для дробных значений используйте '.'");
-            }
-
+            controller.showHatDialog(getNameHat(),getLenHat(),getVolumeHat(),getLowFrequencyHat(),getHighFrequencyHat(),getTailLengthHat(),getClosedHat());
+            myTableModel.fireTableDataChanged();
         }
     }
 }
