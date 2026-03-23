@@ -1,3 +1,4 @@
+package Model;
 public class Hat extends Sample implements applyEf{
     private int tailLength; 
     private boolean closed;

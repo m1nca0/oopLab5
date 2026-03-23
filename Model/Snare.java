@@ -1,3 +1,4 @@
+package Model;
 public class Snare extends Sample implements applyEf{
     private int resonance; 
     private int punch; 

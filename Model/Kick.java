@@ -1,3 +1,4 @@
+package Model;
 public class Kick extends Sample implements applyEf {
     private int bassLevel;
     

@@ -1,12 +1,17 @@
+package View;
 import javax.swing.table.AbstractTableModel;
+
+import Model.Daw;
+import Model.Hat;
+import Model.Kick;
+import Model.Sample;
+import Model.Snare;
 
 public class MyTable extends AbstractTableModel {
     private Daw daw;
-    private DawInOut inOut;
 
-    public MyTable(Daw daw, DawInOut inOut) {
+    public MyTable(Daw daw) {
         this.daw = daw;
-        this.inOut = inOut;
     }
 
     @Override
@@ -95,20 +100,8 @@ public class MyTable extends AbstractTableModel {
                 return "";
         }
     }
-    public void addSamples(Sample sample) {
-        this.daw.CreateSample(sample);
-        this.fireTableDataChanged();
-    }
-    public void deleteSamples(String name, String type) {
-        this.daw.findSample(name,type,false);
-        this.fireTableDataChanged();
-    }
-    public void openSamples(String way){
-        this.daw = inOut.loadProject(way);
-        this.fireTableDataChanged();
-    }
-    public void saveSamples(String way){
-        inOut.saveProject(daw, way);
+    public void setDaw(Daw daw) {
+        this.daw = daw;
     }
 }
 

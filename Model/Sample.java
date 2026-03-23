@@ -1,3 +1,4 @@
+package Model;
 import javax.sound.sampled.*;
 import java.io.File;
 

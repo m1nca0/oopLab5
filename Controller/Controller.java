@@ -1,25 +1,33 @@
+package Controller;
 import javax.swing.JOptionPane;
+
+import Model.Daw;
+import Model.DawInOut;
+import Model.Hat;
+import Model.Kick;
+import Model.Snare;
+import View.MyTable;
+
 import javax.swing.*;
 public class Controller {
     private Daw daw;
     private DawInOut inOut;
-    private MyTable myTableModel;
 
-    public Controller(Daw dawContr, DawInOut inOutContr, MyTable myTableModelContr){
+    public Controller(Daw dawContr, DawInOut inOut){
         this.daw = dawContr;
-        this.inOut = inOutContr;
-        this.myTableModel = myTableModelContr;
+        this.inOut = inOut;
     }
 
     public void saveProjectToFile(String way) {
         if (!way.toLowerCase().endsWith(".txt")) {
             way += ".txt";
         }
-        myTableModel.saveSamples(way);
+        inOut.saveProject(daw, way);
     }
 
-    public void showFileList(String way) {
-        myTableModel.openSamples(way);
+    public Daw showFileList(String way) {
+        this.daw = inOut.loadProject(way);
+        return this.daw;
     }
 
     public void showDeleteMenu(String name, String type) {
@@ -28,7 +36,7 @@ public class Controller {
                 return;
             }
             JOptionPane.showMessageDialog(null, "Сэмпл успешно удален!");
-            myTableModel.deleteSamples(name, type);
+            this.daw.findSample(name,type,false);
         }
 
 
@@ -52,7 +60,7 @@ public class Controller {
                 int bassLevel = Integer.parseInt(bassLevelKick.trim());
 
                 Kick kick = new Kick(name, len, volume, lowFrequency, highFrequency, bassLevel);
-                myTableModel.addSamples(kick);
+                this.daw.CreateSample(kick);
                 JOptionPane.showMessageDialog(null, "Kick - " + name + " успешно добавлен!");
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Введите корректные значения в поля \n Если поле подразумевает числовое значение, не вводите текст \n Для дробных значений используйте '.'");
@@ -81,7 +89,7 @@ public class Controller {
             int punch = Integer.parseInt(punchSnare);
 
             Snare snare = new Snare(name, len, volume, lowFrequency, highFrequency, resonance, punch);
-            myTableModel.addSamples(snare);
+            this.daw.CreateSample(snare);
             JOptionPane.showMessageDialog(null, "Snare - " + name + " успешно добавлен!");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,"Введите корректные значения в поля \n Если поле подразумевает числовое значение, не вводите текст \n Для дробных значений используйте '.'");
@@ -110,7 +118,7 @@ public class Controller {
             int tailLength = Integer.parseInt(tailLengthHat);
             boolean closed = closedHat == "Закрытый" ? false : true;
             Hat hat = new Hat(name, len, volume, lowFrequency, highFrequency, tailLength, closed);
-            myTableModel.addSamples(hat);
+            this.daw.CreateSample(hat);
             JOptionPane.showMessageDialog(null, "Hat - " + name + " успешно добавлен!");
 
         } catch (Exception e) {

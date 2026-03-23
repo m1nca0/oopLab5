@@ -1,3 +1,4 @@
+package Model;
 public enum SampleType {
     KICK("Kick", "Ударный барабан"),
     SNARE("Snare", "Малый барабан"),

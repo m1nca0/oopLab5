@@ -1,11 +1,22 @@
+package View;
+
 import javax.swing.*;
 import javax.swing.table.TableRowSorter;
+
+import Controller.Controller;
+import Model.Daw;
+import Model.DawInOut;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.concurrent.Flow;
 
 public class DawView extends JFrame {
+
+    SearchListener searchListener;
+
     private Daw daw;
     private DawInOut inOut;
     private MyTable myTableModel;
@@ -13,39 +24,38 @@ public class DawView extends JFrame {
     private JFileChooser fileChooser = new JFileChooser();
     private Controller controller;
     private JButton filterButton = new JButton("Параметр поиска");
-        JTextField nameSample = new JTextField();
-        JTextField typeSample = new JTextField();    
+    
+    JTextField nameSample = new JTextField();
+    JTextField typeSample = new JTextField();
 
+    JTextField nameKick = new JTextField(15);
+    JTextField lenKick = new JTextField(15);
+    JTextField volumeKick = new JTextField(15);
+    JTextField lowFrequencyKick = new JTextField(15);
+    JTextField highFrequencyKick = new JTextField(15);
+    JTextField bassLevelKick = new JTextField(15);
 
-        JTextField nameKick = new JTextField(15);
-        JTextField lenKick = new JTextField(15);
-        JTextField volumeKick = new JTextField(15);
-        JTextField lowFrequencyKick = new JTextField(15);
-        JTextField highFrequencyKick = new JTextField(15);
-        JTextField bassLevelKick = new JTextField(15);
+    JTextField nameSnare = new JTextField(15);
+    JTextField lenSnare = new JTextField(15);
+    JTextField volumeSnare = new JTextField(15);
+    JTextField lowFrequencySnare = new JTextField(15);
+    JTextField highFrequencySnare = new JTextField(15);
+    JTextField resonanceSnare = new JTextField(15);
+    JTextField punchSnare = new JTextField(15);
 
-
-        JTextField nameSnare = new JTextField(15);
-        JTextField lenSnare = new JTextField(15);
-        JTextField volumeSnare = new JTextField(15);
-        JTextField lowFrequencySnare = new JTextField(15);
-        JTextField highFrequencySnare = new JTextField(15);
-        JTextField resonanceSnare = new JTextField(15);
-        JTextField punchSnare = new JTextField(15);
-
-        JTextField nameHat = new JTextField(15);
-        JTextField lenHat = new JTextField(15);
-        JTextField volumeHat = new JTextField(15);
-        JTextField lowFrequencyHat = new JTextField(15);
-        JTextField highFrequencyHat = new JTextField(15);
-        JTextField tailLengthHat = new JTextField(15);
-        JTextField closedHat = new JTextField(15);
+    JTextField nameHat = new JTextField(15);
+    JTextField lenHat = new JTextField(15);
+    JTextField volumeHat = new JTextField(15);
+    JTextField lowFrequencyHat = new JTextField(15);
+    JTextField highFrequencyHat = new JTextField(15);
+    JTextField tailLengthHat = new JTextField(15);
+    JTextField closedHat = new JTextField(15);
 
     public DawView() {
         this.daw = new Daw();
         this.inOut = new DawInOut();
-        this.myTableModel = new MyTable(this.daw, this.inOut);
-        this.controller = new Controller(this.daw, this.inOut, this.myTableModel);
+        this.myTableModel = new MyTable(this.daw);
+        this.controller = new Controller(this.daw, this.inOut);
 
         JTable table = new JTable(myTableModel);
         table.setAutoCreateRowSorter(true);
@@ -60,38 +70,41 @@ public class DawView extends JFrame {
         JLabel searchLabel = new JLabel(" Поиск: ");
         JTextField searchField = new JTextField(15);
 
-        searchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
-            @Override
-            public void insertUpdate(javax.swing.event.DocumentEvent e) {
-                applyFilter();
-            }
+        // searchField.getDocument().addDocumentListener(new
+        // javax.swing.event.DocumentListener() {
+        // @Override
+        // public void insertUpdate(javax.swing.event.DocumentEvent e) {
+        // applyFilter();
+        // }
 
-            @Override
-            public void removeUpdate(javax.swing.event.DocumentEvent e) {
-                applyFilter();
-            }
+        // @Override
+        // public void removeUpdate(javax.swing.event.DocumentEvent e) {
+        // applyFilter();
+        // }
 
-            @Override
-            public void changedUpdate(javax.swing.event.DocumentEvent e) {
-                applyFilter();
-            }
+        // @Override
+        // public void changedUpdate(javax.swing.event.DocumentEvent e) {
+        // applyFilter();
+        // }
 
-            private void applyFilter() {
-                String text = searchField.getText();
-                if (text.trim().length() == 0) {
-                    sorter.setRowFilter(null);
-                } else {
-                    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text, rowIndex));
-                }
-            }
-        });
+        // private void applyFilter() {
+        // String text = searchField.getText();
+        // if (text.trim().length() == 0) {
+        // sorter.setRowFilter(null);
+        // } else {
+        // sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text, rowIndex));
+        // }
+        // }
+        // });
+        searchListener = new SearchListener(table, sorter, searchField, rowIndex);
+        searchField.getDocument().addDocumentListener(searchListener);
 
-        setSize(700, 500);
+        setSize(1400, 500);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
         JToolBar toolBar = new JToolBar();
-        toolBar.setFloatable(false);
+        toolBar.setFloatable(true);
         toolBar.add(openButton);
         toolBar.addSeparator();
         toolBar.add(saveButton);
@@ -107,39 +120,39 @@ public class DawView extends JFrame {
 
         add(toolBar, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
-        
+
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 showAddMenu(addButton);
-            } 
+            }
         });
 
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-              showDeleteMenu();
+                showDeleteMenu();
             }
         });
 
         filterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-              showFilterMenu(filterButton);
+                showFilterMenu(filterButton);
             }
         });
 
         openButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-              showFileList();
+                showFileList();
             }
         });
 
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-              saveProjectToFile();
+                saveProjectToFile();
             }
         });
 
@@ -164,7 +177,8 @@ public class DawView extends JFrame {
         int response = fileChooser.showOpenDialog(null);
         if (response == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-            controller.showFileList(file.getAbsolutePath());
+            this.daw = controller.showFileList(file.getAbsolutePath());
+            myTableModel.setDaw(this.daw);
             myTableModel.fireTableDataChanged();
         }
     }
@@ -178,8 +192,11 @@ public class DawView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 rowIndex = 1;
                 filterButton.setText("Тип");
+                if (searchListener != null) {
+                    searchListener.setRowIndex(rowIndex);
+                }
             }
-            
+
         });
         JMenuItem nameIteme = new JMenuItem("Название");
         nameIteme.addActionListener(new ActionListener() {
@@ -187,8 +204,11 @@ public class DawView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 rowIndex = 2;
                 filterButton.setText("Название");
+                if (searchListener != null) {
+                    searchListener.setRowIndex(rowIndex);
+                }
             }
-            
+
         });
         JMenuItem lenIteme = new JMenuItem("Длина");
         lenIteme.addActionListener(new ActionListener() {
@@ -196,8 +216,11 @@ public class DawView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 rowIndex = 3;
                 filterButton.setText("Длина");
+                if (searchListener != null) {
+                    searchListener.setRowIndex(rowIndex);
+                }
             }
-            
+
         });
         JMenuItem volumeIteme = new JMenuItem("Громкость");
         volumeIteme.addActionListener(new ActionListener() {
@@ -205,8 +228,11 @@ public class DawView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 rowIndex = 4;
                 filterButton.setText("Громкость");
+                if (searchListener != null) {
+                    searchListener.setRowIndex(rowIndex);
+                }
             }
-            
+
         });
         JMenuItem lowIteme = new JMenuItem("Низ");
         lowIteme.addActionListener(new ActionListener() {
@@ -214,8 +240,11 @@ public class DawView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 rowIndex = 5;
                 filterButton.setText("Низ");
+                if (searchListener != null) {
+                    searchListener.setRowIndex(rowIndex);
+                }
             }
-            
+
         });
         JMenuItem highIteme = new JMenuItem("Вверх");
         highIteme.addActionListener(new ActionListener() {
@@ -223,8 +252,11 @@ public class DawView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 rowIndex = 6;
                 filterButton.setText("Вверх");
+                if (searchListener != null) {
+                    searchListener.setRowIndex(rowIndex);
+                }
             }
-            
+
         });
         JMenuItem bassIteme = new JMenuItem("Басс");
         bassIteme.addActionListener(new ActionListener() {
@@ -232,8 +264,11 @@ public class DawView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 rowIndex = 7;
                 filterButton.setText("Басс");
+                if (searchListener != null) {
+                    searchListener.setRowIndex(rowIndex);
+                }
             }
-            
+
         });
         JMenuItem resIteme = new JMenuItem("Резонанс");
         resIteme.addActionListener(new ActionListener() {
@@ -241,8 +276,11 @@ public class DawView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 rowIndex = 8;
                 filterButton.setText("Резонанс");
+                if (searchListener != null) {
+                    searchListener.setRowIndex(rowIndex);
+                }
             }
-            
+
         });
         JMenuItem punchIteme = new JMenuItem("Удар");
         punchIteme.addActionListener(new ActionListener() {
@@ -250,8 +288,11 @@ public class DawView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 rowIndex = 9;
                 filterButton.setText("Удар");
+                if (searchListener != null) {
+                    searchListener.setRowIndex(rowIndex);
+                }
             }
-            
+
         });
         JMenuItem tailIteme = new JMenuItem("Длина хвоста");
         tailIteme.addActionListener(new ActionListener() {
@@ -259,8 +300,11 @@ public class DawView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 rowIndex = 10;
                 filterButton.setText("Длина хвоста");
+                if (searchListener != null) {
+                    searchListener.setRowIndex(rowIndex);
+                }
             }
-            
+
         });
         JMenuItem openCloseIteme = new JMenuItem("Закрытый/Открытый");
         openCloseIteme.addActionListener(new ActionListener() {
@@ -268,8 +312,11 @@ public class DawView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 rowIndex = 11;
                 filterButton.setText("Закрытый/Открытый");
+                if (searchListener != null) {
+                    searchListener.setRowIndex(rowIndex);
+                }
             }
-            
+
         });
 
         filterMenu.add(typeIteme);
@@ -282,17 +329,18 @@ public class DawView extends JFrame {
         filterMenu.add(resIteme);
         filterMenu.add(punchIteme);
         filterMenu.add(tailIteme);
-        filterMenu.add(lenIteme);
         filterMenu.add(openCloseIteme);
         filterMenu.show(button, 0, button.getHeight());
     }
 
-    private String getNameSample(){
+    private String getNameSample() {
         return nameSample.getText().trim();
     }
-    private String getTypeSample(){
+
+    private String getTypeSample() {
         return typeSample.getText().trim();
     }
+
     private void showDeleteMenu() {
         JPanel deletePanel = new JPanel(new GridLayout(2, 2, 5, 5));
         deletePanel.add(new JLabel("Название:"));
@@ -344,26 +392,30 @@ public class DawView extends JFrame {
         menu.show(button, 0, button.getHeight());
     }
 
-
-
-    private String getNameKick(){
+    private String getNameKick() {
         return nameKick.getText().trim();
     }
-    private String getLenKick(){
+
+    private String getLenKick() {
         return lenKick.getText().trim();
     }
-        private String getVolumeKick(){
+
+    private String getVolumeKick() {
         return volumeKick.getText().trim();
     }
-    private String getLowFrequencyKick(){
+
+    private String getLowFrequencyKick() {
         return lowFrequencyKick.getText().trim();
     }
-        private String getHighFrequencyKick(){
+
+    private String getHighFrequencyKick() {
         return highFrequencyKick.getText().trim();
     }
-    private String getBassLevelKick(){
+
+    private String getBassLevelKick() {
         return bassLevelKick.getText().trim();
     }
+
     private void showKickDialog() {
         JPanel panel = new JPanel(new GridLayout(6, 2, 5, 5));
         panel.add(new JLabel("Название: "));
@@ -386,33 +438,40 @@ public class DawView extends JFrame {
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
-            controller.showKickDialog(getNameKick(),getLenKick(),getVolumeKick(),getLowFrequencyKick(),getHighFrequencyKick(),getBassLevelKick());
+            controller.showKickDialog(getNameKick(), getLenKick(), getVolumeKick(), getLowFrequencyKick(),
+                    getHighFrequencyKick(), getBassLevelKick());
             myTableModel.fireTableDataChanged();
         }
     }
 
-
-    private String getNameSnare(){
+    private String getNameSnare() {
         return nameSnare.getText().trim();
     }
-    private String getLenSnare(){
+
+    private String getLenSnare() {
         return lenSnare.getText().trim();
     }
-        private String getVolumeSnare(){
+
+    private String getVolumeSnare() {
         return volumeSnare.getText().trim();
     }
-    private String getLowFrequencySnare(){
+
+    private String getLowFrequencySnare() {
         return lowFrequencySnare.getText().trim();
     }
-        private String getHighFrequencySnare(){
+
+    private String getHighFrequencySnare() {
         return highFrequencySnare.getText().trim();
     }
-    private String getResonanceSnare(){
+
+    private String getResonanceSnare() {
         return resonanceSnare.getText().trim();
     }
-    private String getPunchSnare(){
+
+    private String getPunchSnare() {
         return punchSnare.getText().trim();
     }
+
     private void showSnareDialog() {
 
         JPanel panel = new JPanel(new GridLayout(7, 2, 5, 5));
@@ -438,32 +497,40 @@ public class DawView extends JFrame {
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
-            controller.showSnareDialog(getNameSnare(),getLenSnare(),getVolumeSnare(),getLowFrequencySnare(),getHighFrequencySnare(),getResonanceSnare(),getPunchSnare());
+            controller.showSnareDialog(getNameSnare(), getLenSnare(), getVolumeSnare(), getLowFrequencySnare(),
+                    getHighFrequencySnare(), getResonanceSnare(), getPunchSnare());
             myTableModel.fireTableDataChanged();
         }
     }
 
-    private String getNameHat(){
+    private String getNameHat() {
         return nameHat.getText().trim();
     }
-    private String getLenHat(){
+
+    private String getLenHat() {
         return lenHat.getText().trim();
     }
-        private String getVolumeHat(){
+
+    private String getVolumeHat() {
         return volumeHat.getText().trim();
     }
-    private String getLowFrequencyHat(){
+
+    private String getLowFrequencyHat() {
         return lowFrequencyHat.getText().trim();
     }
-        private String getHighFrequencyHat(){
+
+    private String getHighFrequencyHat() {
         return highFrequencyHat.getText().trim();
     }
-    private String getTailLengthHat(){
+
+    private String getTailLengthHat() {
         return tailLengthHat.getText().trim();
     }
-    private String getClosedHat(){
+
+    private String getClosedHat() {
         return closedHat.getText().trim();
     }
+
     private void showHatDialog() {
 
         JPanel panel = new JPanel(new GridLayout(7, 2, 5, 5));
@@ -489,7 +556,8 @@ public class DawView extends JFrame {
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.PLAIN_MESSAGE);
         if (result == JOptionPane.OK_OPTION) {
-            controller.showHatDialog(getNameHat(),getLenHat(),getVolumeHat(),getLowFrequencyHat(),getHighFrequencyHat(),getTailLengthHat(),getClosedHat());
+            controller.showHatDialog(getNameHat(), getLenHat(), getVolumeHat(), getLowFrequencyHat(),
+                    getHighFrequencyHat(), getTailLengthHat(), getClosedHat());
             myTableModel.fireTableDataChanged();
         }
     }
